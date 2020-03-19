@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Etablissment Public{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        {% block body %}
+            <h1>Rechercher les informations sur une ville</h1>
+            <form action="/" method="get">
+                <label for="city_name">Nom de la commune</label>
+                <input name="city_name" id="city_name" placeholder="Ville" value="{{ city_name }}"/>
+                <label for="zipcode">Code Postal</label>
+                <input name="zipcode" id="zipcode" placeholder="Code Postal" value="{{ zipcode }}"/>
+                <button type="submit">Envoyer</button>
+            </form>
+            <h2 style="color: red"><strong>{{ error_message }}</strong></h2>
+            <ul>
+                {% if cities != [] %}
+                    <h3>Voici les informations sur {{ cities[0]['nom'] }} dans le {{ cities[0]['codeDepartement'] }}</h3>
+                    <li><strong>Nom de l'établissement:</strong> {{ cities[0]['etablissement']['features'][0]['properties']['nom'] }}</li>
+                    {% if cities[0]['etablissement']['features'][0]['properties']['telephone'] is defined %}
+                        <li><strong>Numéro de Téléphone:</strong> {{ cities[0]['etablissement']['features'][0]['properties']['telephone'] }}</li>
+                    {% endif %}
+                    {% if cities[0]['etablissement']['features'][0]['properties']['adresses'][0] is defined%}
+                        <li><strong>Adresse:</strong> {{ cities[0]['etablissement']['features'][0]['properties']['adresses'][0]['lignes'][0] }} {{ cities[0]['etablissement']['features'][0]['properties']['adresses'][0]['codePostal'] }} {{ cities[0]['etablissement']['features'][0]['properties']['adresses'][0]['commune'] }}</li>
+                    {% endif %}
+                    {% if cities[0]['etablissement']['features'][0]['properties']['email'] is defined %}
+                        <li><strong>Mail:</strong> {{ cities[0]['etablissement']['features'][0]['properties']['email'] }}</li>
+                    {% endif %}
+                    {% if cities[0]['etablissement']['features'][0]['properties']['url'] is defined %}
+                        <li><a href="{{ cities[0]['etablissement']['features'][0]['properties']['url'] }}"> Site web de l'etablissement</a></li>
+                    {% endif %}
+                    {% if cities[0]['etablissement']['features'][0]['properties']["horaires"] is defined %}
+                        <li><strong>Horaires d'ouvertures:</strong>
+                            {% for  horaires in cities[0]['etablissement']['features'][0]['properties']['horaires'] %}
+                                <p>{{ horaires['du'] }} au {{ horaires['au'] }}:</p>
+                                {% for heures in  horaires['heures']  %}
+                                    <p>{{ heures['de'] }} - {{ heures['a'] }}</p>
+                                {% endfor %}
+                            {% endfor %}
+                        </li>
+                    {% endif %}
+                {% endif %}
+            </ul>
+        {% endblock %}
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>
