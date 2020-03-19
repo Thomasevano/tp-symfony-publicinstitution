@@ -22,15 +22,16 @@ class HomeController extends AbstractController
         if($_GET){
             $city_name = $_GET["city_name"];
             $zipcode = $_GET["zipcode"];
-            $cities = $geoApi->getCommune($zipcode,str_replace(' ','-',$city_name));
+
+            $cities = $geoApi->getCommune($zipcode, str_replace(' ', '-', $city_name));
             foreach ($cities as $city) {
                 $facilities = $publicFacilities->getFacilities($city['code']);
-                if($facilities != null) {
+                if ($facilities != null) {
                     $city['etablissement'] = $facilities;
                 }
-                array_push($getCity,$city);
+                array_push($getCity, $city);
             }
-            if($cities == []) {
+            if ($cities == []) {
                 $error_message = "Aucune ville trouvé.";
             }
 
@@ -41,7 +42,6 @@ class HomeController extends AbstractController
                 'error_message' => $error_message
 
             ]);
-
         }
         else {
             return $this->render('base.html.twig', [

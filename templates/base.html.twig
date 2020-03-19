@@ -19,7 +19,11 @@
             <ul>
                 {% if cities != [] %}
                     <h3>Voici les informations sur {{ cities[0]['nom'] }} dans le {{ cities[0]['codeDepartement'] }}</h3>
-                    <li><strong>Nom de l'établissement:</strong> {{ cities[0]['etablissement']['features'][0]['properties']['nom'] }}</li>
+                    {% if cities[0]['etablissement']['features'][0]['properties']['nom'] is defined %}
+                        <li><strong>Nom de l'établissement:</strong> {{ cities[0]['etablissement']['features'][0]['properties']['nom'] }}</li>
+                        {% else %}
+                        <p>Il n'y a pas d'établissement</p>
+                    {% endif %}
                     {% if cities[0]['etablissement']['features'][0]['properties']['telephone'] is defined %}
                         <li><strong>Numéro de Téléphone:</strong> {{ cities[0]['etablissement']['features'][0]['properties']['telephone'] }}</li>
                     {% endif %}
